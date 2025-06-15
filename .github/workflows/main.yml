@@ -5,21 +5,18 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: raspberrypi/pico-sdk:latest  # 改用 Docker Hub 镜像
-
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
-
+        
+    - name: Install Toolchain
+      run: |
+        sudo apt update
+        sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
+        
     - name: Build
       run: |
-        mkdir build
-        cd build
-        cmake .. -DPICO_SDK_PATH=/pico-sdk
+        mkdir build && cd build
+        cmake .. -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
         make -j4
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: firmware
-        path: build/*.uf2
