@@ -19,16 +19,16 @@ add_subdirectory(
     ${CMAKE_BINARY_DIR}/lib/pico_pio_usb
 )
 
-# 包含头文件路径
-target_include_directories(adb_host PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB/src
-    ${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/src/common/pico_stdlib/include
-)
-
-# 可执行文件
+# 可执行文件（必须在include_directories之前）
 add_executable(adb_host
     main.c
     adb.c
+)
+
+# 包含头文件路径（移到add_executable之后）
+target_include_directories(adb_host PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB/src
+    ${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/src/common/pico_stdlib/include
 )
 
 # 链接库
