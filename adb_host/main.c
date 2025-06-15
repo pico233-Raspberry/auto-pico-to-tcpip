@@ -1,3 +1,6 @@
+
+#include <stdio.h>
+#include "pico/pio_usb.h"  // 包含USB配置结构体
 #include "pico/stdlib.h"
 #include "pio_usb.h"
 #include "adb.h"
