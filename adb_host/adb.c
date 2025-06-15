@@ -1,5 +1,8 @@
 #include "adb.h"
 #include "pio_usb.h"
+// adb.c 顶部添加
+#include <string.h>
+#include "pico/pio_usb.h"  // 包含USB主机函数声明
 
 #define ADB_ENDPOINT 0x81
 
