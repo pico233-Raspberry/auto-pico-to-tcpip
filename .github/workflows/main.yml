@@ -24,19 +24,18 @@ jobs:
 
       - name: Build Project
         run: |
-          # 设置工具链路径
-          export PATH=$PATH:/usr/bin/arm-none-eabi/bin
-          
           cd adb_host
           rm -rf build
           mkdir build
           cd build
           
-          # 强制使用 ARM 工具链
+          # 关键修改：添加 -DPICO_TOOLCHAIN_PATH 和禁用测试
           cmake .. \
             -DPICO_SDK_PATH=../../pico-sdk \
+            -DPICO_TOOLCHAIN_PATH=/usr \
             -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
             -DCMAKE_CXX_COMPILER=arm-none-eabi-g++ \
-            -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc
+            -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc \
+            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY  # 禁用可执行文件测试
           
           make -j4
