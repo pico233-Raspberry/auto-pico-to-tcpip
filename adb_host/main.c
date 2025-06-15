@@ -1,6 +1,6 @@
-// main.c 和 adb.c 的顶部修改为：
-#include <stdint.h>      // 添加标准类型定义
-#include "pio_usb.h"     // 修改为直接包含 PIO-USB 的头文件
+
+#include <stdint.h>
+#include "pio_usb.h"
 #include "pico/stdlib.h"
 #include "adb.h"
 
