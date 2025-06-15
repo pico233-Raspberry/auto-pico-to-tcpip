@@ -1,33 +1,36 @@
 cmake_minimum_required(VERSION 3.12)
 
-# 动态定位 Pico SDK
+# 1. 先定义项目（必须在 pico_sdk_init 之前）
+project(adb_host C CXX ASM)
+
+# 2. 动态定位 Pico SDK
 include(${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/external/pico_sdk_import.cmake)
 
-# 初始化 SDK（只需一次）
+# 3. 初始化 SDK（必须在 project() 之后）
 pico_sdk_init()
 
-# 项目定义
-project(adb_host)
+# 4. 添加 PIO-USB 子模块（使用绝对路径确保可靠性）
+add_subdirectory(
+    ${CMAKE_CURRENT_LIST_DIR}/../../Pico-PIO-USB 
+    ${CMAKE_BINARY_DIR}/lib/pico_pio_usb
+)
 
-# 添加 PIO-USB 子模块（路径需确认是否正确）
-add_subdirectory(../../Pico-PIO-USB lib/pico_pio_usb)
-
-# 可执行文件
+# 5. 可执行文件
 add_executable(adb_host
     main.c
     adb.c
 )
 
-# 链接库
+# 6. 包含头文件路径（确保路径存在）
+target_include_directories(adb_host PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/../../Pico-PIO-USB/src
+)
+
+# 7. 链接库
 target_link_libraries(adb_host
     pico_stdlib
-    pico_pio_usb_host  # 确保子模块正确导出此库名
+    pico_pio_usb_host  # 确认库名是否匹配
 )
 
-# 包含头文件路径
-target_include_directories(adb_host PRIVATE
-    ../../Pico-PIO-USB/src  # 确认路径是否指向实际头文件位置
-)
-
-# 生成额外输出（UF2等）
+# 8. 生成额外输出
 pico_add_extra_outputs(adb_host)
