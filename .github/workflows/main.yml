@@ -29,5 +29,7 @@ jobs:
           cmake .. \
             -DPICO_SDK_PATH=../../pico-sdk \
             -DPICO_TOOLCHAIN_PATH=/usr \
-            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
+            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
+            -DPICO_PLATFORM=rp2040 \
+            -DPICO_BOARD=pico
           make -j4 VERBOSE=1
