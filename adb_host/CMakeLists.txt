@@ -6,6 +6,11 @@ set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_CROSSCOMPILING 1)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
+# 强制使用ARM工具链
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
+
 # 项目定义
 project(adb_host C CXX ASM)
 
@@ -19,13 +24,13 @@ add_subdirectory(
     ${CMAKE_BINARY_DIR}/lib/pico_pio_usb
 )
 
-# 可执行文件（必须在include_directories之前）
+# 可执行文件
 add_executable(adb_host
     main.c
     adb.c
 )
 
-# 包含头文件路径（移到add_executable之后）
+# 包含头文件路径
 target_include_directories(adb_host PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB/src
     ${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/src/common/pico_stdlib/include
@@ -37,6 +42,7 @@ target_link_libraries(adb_host
     hardware_pio
     hardware_dma
     pico_pio_usb
+    pico_standard_link
 )
 
 # 生成UF2等输出
