@@ -1,15 +1,11 @@
-name: Pico Build and Release
+name: Pico Build
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ghcr.io/raspberrypi/pico-sdk:latest
+    container: raspberrypi/pico-sdk:latest  # 改用 Docker Hub 镜像
 
     steps:
     - uses: actions/checkout@v4
@@ -23,7 +19,7 @@ jobs:
         cmake .. -DPICO_SDK_PATH=/pico-sdk
         make -j4
 
-    - uses: actions/upload-artifact@v4  # 关键修改处
+    - uses: actions/upload-artifact@v4
       with:
-        name: pico-firmware
+        name: firmware
         path: build/*.uf2
