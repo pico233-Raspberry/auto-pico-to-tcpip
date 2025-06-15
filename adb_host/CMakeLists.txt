@@ -9,7 +9,6 @@ set(CMAKE_CROSSCOMPILING 1)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 project(adb_host C CXX ASM)
-...
 # 1. 定义项目（必须在 pico_sdk_init 之前）
 project(adb_host C CXX ASM)
 
