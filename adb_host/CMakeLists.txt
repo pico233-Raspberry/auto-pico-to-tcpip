@@ -38,7 +38,9 @@ target_include_directories(adb_host PRIVATE
 # 7. 链接库
 target_link_libraries(adb_host
     pico_stdlib
-    pico_pio_usb_host
+    pico_pio_usb
+    hardware_pio
+    hardware_dma
 )
 
 # 8. 生成 UF2 等输出
