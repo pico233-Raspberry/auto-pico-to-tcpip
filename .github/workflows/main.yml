@@ -4,24 +4,28 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container: ghcr.io/raspberrypi/pico-sdk:latest
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    - name: Clean Build Directory
+    - name: Install Dependencies
       run: |
-        cd adb_host
-        rm -rf build  # 强制清理旧目录
+        sudo apt update
+        sudo apt install -y \
+          cmake \
+          gcc-arm-none-eabi \
+          libnewlib-arm-none-eabi \
+          git \
+          build-essential
 
     - name: Build
       run: |
         cd adb_host
-        mkdir build && cd build
-        cmake .. -DPICO_SDK_PATH=/pico-sdk  # 容器内绝对路径
+        rm -rf build && mkdir build && cd build
+        cmake .. -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
         make -j4
 
     - uses: actions/upload-artifact@v4
