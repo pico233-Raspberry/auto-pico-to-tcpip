@@ -1,0 +1,37 @@
+name: Pico Build and Release
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/raspberrypi/pico-sdk:latest  # 官方Pico SDK容器
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'  # 递归克隆子模块（如pico-sdk）
+
+    - name: Configure and Build
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DPICO_SDK_PATH=/pico-sdk
+        make -j4
+
+    - name: Upload UF2 Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: pico-firmware
+        path: build/*.uf2  # 上传所有生成的UF2文件
+
+    - name: Create Release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: build/*.uf2  # 打标签时自动发布版本
