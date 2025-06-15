@@ -14,14 +14,29 @@ jobs:
       - name: Install ARM Toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential
+          sudo apt-get install -y \
+            cmake \
+            gcc-arm-none-eabi \
+            libnewlib-arm-none-eabi \
+            build-essential \
+            git \
+            python3
 
       - name: Build Project
         run: |
+          # 设置工具链路径
+          export PATH=$PATH:/usr/bin/arm-none-eabi/bin
+          
           cd adb_host
-          # 清理旧的 build 目录（如果存在）
           rm -rf build
           mkdir build
           cd build
-          cmake .. -DPICO_SDK_PATH=../../pico-sdk
+          
+          # 强制使用 ARM 工具链
+          cmake .. \
+            -DPICO_SDK_PATH=../../pico-sdk \
+            -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
+            -DCMAKE_CXX_COMPILER=arm-none-eabi-g++ \
+            -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc
+          
           make -j4
