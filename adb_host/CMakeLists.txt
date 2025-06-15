@@ -1,5 +1,15 @@
 cmake_minimum_required(VERSION 3.12)
 
+# 关键添加：裸机编译设置
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+set(CMAKE_CROSSCOMPILING 1)
+
+# 禁用编译器测试
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
+project(adb_host C CXX ASM)
+...
 # 1. 定义项目（必须在 pico_sdk_init 之前）
 project(adb_host C CXX ASM)
 
