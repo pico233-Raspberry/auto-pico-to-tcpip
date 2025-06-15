@@ -1,5 +1,5 @@
-
-#include <stdint.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include "pio_usb.h"
 #include "adb.h"
@@ -20,7 +20,6 @@ void adb_enable_tcpip() {
     adb_send_frame("host:transport:any");
     adb_send_frame("shell:setprop service.adb.tcp.port 5555 && stop adbd && start adbd");
 }
-
 
 bool adb_device_connected() {
     return usb_host_get_device_count() > 0;
