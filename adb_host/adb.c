@@ -1,9 +1,7 @@
-#include "adb.h"
-#include "pio_usb.h"
-// adb.c 顶部添加
-#include <string.h>
-#include "pico/pio_usb.h"  // 包含USB主机函数声明
-
+// main.c 和 adb.c 的顶部修改为：
+#include <stdint.h>      // 添加标准类型定义
+#include "pio_usb.h"     // 修改为直接包含 PIO-USB 的头文件
+#include "pico/stdlib.h"
 #define ADB_ENDPOINT 0x81
 
 static void adb_send_frame(const char* cmd) {
