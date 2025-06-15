@@ -1,46 +1,26 @@
-name: Pico CI
+name: Pico Build
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    container: raspberrypi/pico-sdk:latest  # 使用官方Docker镜像
 
     steps:
     - uses: actions/checkout@v4
       with:
-        submodules: 'recursive'
-        fetch-depth: 0
-
-    - name: Install Toolchain
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          cmake \
-          gcc-arm-none-eabi \
-          libnewlib-arm-none-eabi \
-          build-essential
-
-    - name: Configure
-      run: |
-        mkdir build
-        cd build
-        cmake .. \
-          -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
-          -DPICO_BOARD=pico
+        submodules: recursive  # 确保克隆pico-sdk子模块
 
     - name: Build
       run: |
+        cd adb_host  # 进入包含CMakeLists.txt的目录
+        mkdir -p build
         cd build
-        make -j$(nproc)
+        cmake .. -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
+        make -j4
 
     - uses: actions/upload-artifact@v4
-      if: success()
       with:
-        name: pico-firmware
-        path: build/*.uf2
+        name: firmware
+        path: adb_host/build/*.uf2  # 上传生成的固件
