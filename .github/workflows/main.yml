@@ -1,26 +1,46 @@
-name: Pico Build
+name: Pico CI
 
-on: [push]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: raspberrypi/pico-sdk:latest
+    timeout-minutes: 30
 
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
 
-    - name: Build
+    - name: Install Toolchain
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cmake \
+          gcc-arm-none-eabi \
+          libnewlib-arm-none-eabi \
+          build-essential
+
+    - name: Configure
       run: |
         mkdir build
         cd build
-        cmake .. -DPICO_SDK_PATH=/pico-sdk
-        make -j4
+        cmake .. \
+          -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
+          -DPICO_BOARD=pico
+
+    - name: Build
+      run: |
+        cd build
+        make -j$(nproc)
 
     - uses: actions/upload-artifact@v4
+      if: success()
       with:
-        name: firmware
+        name: pico-firmware
         path: build/*.uf2
