@@ -6,13 +6,11 @@
 #include "adb.h"
 
 int main() {
-    stdio_init_all();
-    printf("Pico ADB Host Initializing...\n");
-
+    // 初始化 USB 主机配置
     pio_usb_configuration_t cfg = PIO_USB_DEFAULT_CONFIG;
-    cfg.pin_dp = 2;  // 根据实际硬件连接修改引脚号
-usb_device_t *host = pio_usb_host_init(&cfg);  // 注意类型改为 usb_device_t
-    usb_host_t *host = pio_usb_host_init(&cfg);
+    cfg.pin_dp = 2;  // 根据实际硬件连接修改引脚号（例如 GPIO2）
+
+    usb_device_t *host = pio_usb_host_init(&cfg);
 
     adb_init();
 
