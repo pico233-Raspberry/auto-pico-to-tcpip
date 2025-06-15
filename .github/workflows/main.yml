@@ -9,7 +9,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: recursive  # 确保子模块（如 pico-sdk）被克隆
+          submodules: recursive
 
       - name: Install ARM Toolchain
         run: |
@@ -19,6 +19,8 @@ jobs:
       - name: Build Project
         run: |
           cd adb_host
+          # 清理旧的 build 目录（如果存在）
+          rm -rf build
           mkdir build
           cd build
           cmake .. -DPICO_SDK_PATH=../../pico-sdk
