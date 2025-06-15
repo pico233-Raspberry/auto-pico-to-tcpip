@@ -6,11 +6,6 @@ set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_CROSSCOMPILING 1)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-# 强制使用ARM工具链
-set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
-set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
-
 # 项目定义
 project(adb_host C CXX ASM)
 
@@ -42,7 +37,6 @@ target_link_libraries(adb_host
     hardware_pio
     hardware_dma
     pico_pio_usb
-    pico_standard_link
 )
 
 # 生成UF2等输出
