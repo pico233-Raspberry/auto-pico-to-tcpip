@@ -28,5 +28,9 @@ jobs:
           cd build
           cmake .. \
             -DPICO_SDK_PATH=../../pico-sdk \
+            -DPICO_TOOLCHAIN_PATH=/usr \
+            -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
+            -DCMAKE_CXX_COMPILER=arm-none-eabi-g++ \
+            -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc \
             -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
-          make -j4
+          make -j4 VERBOSE=1
