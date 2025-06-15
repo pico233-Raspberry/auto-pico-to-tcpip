@@ -10,8 +10,8 @@ int main() {
     printf("Pico ADB Host Initializing...\n");
 
     pio_usb_configuration_t cfg = PIO_USB_DEFAULT_CONFIG;
-    cfg.pin_dp = PIO_USB_DP_PIN;
-    cfg.pin_dm = PIO_USB_DM_PIN;
+    cfg.pin_dp = 2;  // 根据实际硬件连接修改引脚号
+usb_device_t *host = pio_usb_host_init(&cfg);  // 注意类型改为 usb_device_t
     usb_host_t *host = pio_usb_host_init(&cfg);
 
     adb_init();
