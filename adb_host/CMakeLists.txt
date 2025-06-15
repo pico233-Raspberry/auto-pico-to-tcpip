@@ -6,11 +6,6 @@ set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_CROSSCOMPILING 1)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-# 强制使用 ARM 工具链
-set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
-set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
-
 # 项目定义
 project(adb_host C CXX ASM)
 
@@ -22,6 +17,12 @@ pico_sdk_init()
 add_subdirectory(
     ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB
     ${CMAKE_BINARY_DIR}/lib/pico_pio_usb
+)
+
+# 包含头文件路径（关键修复）
+include_directories(
+    ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB/src
+    ${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/src/common/pico_stdlib/include
 )
 
 # 可执行文件
