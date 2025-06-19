@@ -8,6 +8,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+          
+      - name: Force Update Submodules
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --force --recursive
+          ls -la pico-sdk/external/pico_sdk_import.cmake
+
       - name: Install Toolchain
         run: |
           sudo apt-get update
@@ -16,6 +23,7 @@ jobs:
             gcc-arm-none-eabi \
             libnewlib-arm-none-eabi \
             build-essential
+
       - name: Build
         run: |
           cd adb_host
@@ -23,5 +31,7 @@ jobs:
           mkdir build && cd build
           cmake .. \
             -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
-            -DPICO_BUILD_PICOTOOL=OFF
+            -DPICO_BUILD_PICOTOOL=OFF \
+            -DPICO_BUILD_DOCS=OFF \
+            -DPICO_BUILD_EXAMPLES=OFF
           make -j4
