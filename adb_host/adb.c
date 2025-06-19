@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include "pio_usb.h"
 #include "adb.h"
@@ -14,6 +13,9 @@ static void adb_send_frame(const char* cmd) {
     };
     usb_host_write(ADB_ENDPOINT, header, 4);
     usb_host_write(ADB_ENDPOINT, (uint8_t*)cmd, len);
+}
+
+void adb_init() {
 }
 
 void adb_enable_tcpip() {
