@@ -1,7 +1,5 @@
 name: Pico Build
-
 on: [push, pull_request]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,7 +9,6 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-
       - name: Install ARM Toolchain
         run: |
           sudo apt-get update
@@ -20,7 +17,6 @@ jobs:
             gcc-arm-none-eabi \
             libnewlib-arm-none-eabi \
             build-essential
-
       - name: Build Project
         run: |
           cd adb_host
@@ -30,7 +26,5 @@ jobs:
           cmake .. \
             -DPICO_SDK_PATH=../../pico-sdk \
             -DPICO_TOOLCHAIN_PATH=/usr \
-            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
-            -DPICO_PLATFORM=rp2040 \
-            -DPICO_BOARD=pico
+            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
           make -j4 VERBOSE=1
