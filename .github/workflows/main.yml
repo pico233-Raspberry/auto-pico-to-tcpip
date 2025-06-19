@@ -4,18 +4,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
-          
-      - name: Update submodules
-        run: |
-          git submodule update --init --recursive
-          ls -la pico-sdk
-
-      - name: Install ARM Toolchain
+      - name: Install Toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -23,15 +16,12 @@ jobs:
             gcc-arm-none-eabi \
             libnewlib-arm-none-eabi \
             build-essential
-
-      - name: Build Project
+      - name: Build
         run: |
           cd adb_host
           rm -rf build
-          mkdir build
-          cd build
+          mkdir build && cd build
           cmake .. \
             -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
-            -DPICO_TOOLCHAIN_PATH=/usr \
-            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY
-          make -j4 VERBOSE=1
+            -DPICO_BUILD_PICOTOOL=OFF
+          make -j4
