@@ -6,11 +6,13 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 set(PICO_BUILD_PICOTOOL OFF CACHE BOOL "" FORCE)
 set(PICO_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(PICO_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(PICO_NO_HARDWARE ON)
+set(PICO_NO_HARDWARE ON CACHE BOOL "" FORCE)
+set(PICO_PLATFORM "rp2040" CACHE STRING "" FORCE)
 
 project(adb_host C CXX ASM)
-include(${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/external/pico_sdk_import.cmake)
-pico_sdk_init()
+set(PICO_SDK_PATH ${CMAKE_CURRENT_LIST_DIR}/../pico-sdk)
+include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+pico_sdk_init(NO_SYSTEM_INIT)
 
 add_subdirectory(
     ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB
@@ -20,7 +22,7 @@ add_subdirectory(
 add_executable(adb_host main.c adb.c)
 target_include_directories(adb_host PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/../Pico-PIO-USB/src
-    ${CMAKE_CURRENT_LIST_DIR}/../pico-sdk/src/common/pico_stdlib/include
+    ${PICO_SDK_PATH}/src/common/pico_stdlib/include
 )
 target_link_libraries(adb_host
     pico_stdlib
