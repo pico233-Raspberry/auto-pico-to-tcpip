@@ -16,15 +16,18 @@ jobs:
             cmake \
             gcc-arm-none-eabi \
             libnewlib-arm-none-eabi \
-            build-essential
+            build-essential \
+            python3 \
+            python3-pip
+          python3 -m pip install -r $GITHUB_WORKSPACE/pico-sdk/requirements.txt
       - run: |
           cd adb_host
           rm -rf build CMakeCache.txt CMakeFiles
           cmake -B build \
             -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
+            -DPICO_PLATFORM=rp2040 \
+            -DPICO_COMPILER=pico_arm_gcc \
+            -DPICO_TOOLCHAIN_PATH=/usr/bin \
             -DPICO_BUILD_PICOTOOL=OFF \
-            -DPICO_BUILD_DOCS=OFF \
-            -DPICO_BUILD_EXAMPLES=OFF \
-            -DPICO_NO_HARDWARE=ON \
-            -DPICO_PLATFORM=rp2040
-          cmake --build build --target adb_host
+            -DPICO_NO_HARDWARE=ON
+          cmake --build build --target adb_host -j4
