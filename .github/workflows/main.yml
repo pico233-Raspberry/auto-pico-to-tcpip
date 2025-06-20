@@ -8,9 +8,9 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-      - run: git submodule sync --recursive
-      - run: git submodule update --init --force --recursive
       - run: |
+          git submodule sync --recursive
+          git submodule update --init --force --recursive
           sudo apt-get update
           sudo apt-get install -y \
             cmake \
@@ -19,9 +19,12 @@ jobs:
             build-essential
       - run: |
           cd adb_host
-          rm -rf build _deps
+          rm -rf build CMakeCache.txt CMakeFiles
           cmake -B build \
             -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
             -DPICO_BUILD_PICOTOOL=OFF \
-            -DPICO_NO_HARDWARE=ON
-          cmake --build build --parallel 4
+            -DPICO_BUILD_DOCS=OFF \
+            -DPICO_BUILD_EXAMPLES=OFF \
+            -DPICO_NO_HARDWARE=ON \
+            -DPICO_PLATFORM=rp2040
+          cmake --build build --target adb_host
