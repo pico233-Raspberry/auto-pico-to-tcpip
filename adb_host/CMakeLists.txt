@@ -14,6 +14,13 @@ set(PICO_NO_HARDWARE ON CACHE BOOL "" FORCE)
 
 project(adb_host C CXX ASM)
 
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
+set(CMAKE_C_FLAGS "-mcpu=cortex-m0plus -mthumb")
+set(CMAKE_CXX_FLAGS "-mcpu=cortex-m0plus -mthumb")
+set(CMAKE_ASM_FLAGS "-mcpu=cortex-m0plus -mthumb")
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 pico_sdk_init(NO_SYSTEM_INIT)
 
@@ -32,5 +39,6 @@ target_link_libraries(adb_host
     hardware_pio
     hardware_dma
     pico_pio_usb
+    hardware_usb
 )
 pico_add_extra_outputs(adb_host)
