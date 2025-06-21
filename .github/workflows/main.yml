@@ -27,6 +27,12 @@ jobs:
           cmake -B build \
             -DPICO_SDK_PATH=$PICO_SDK_PATH \
             -DPICO_PLATFORM=$PICO_PLATFORM \
+            -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
+            -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc \
+            -DCMAKE_C_FLAGS="-mcpu=cortex-m0plus -mthumb" \
+            -DCMAKE_CXX_FLAGS="-mcpu=cortex-m0plus -mthumb" \
+            -DCMAKE_ASM_FLAGS="-mcpu=cortex-m0plus -mthumb" \
+            -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
             -DPICO_BUILD_PICOTOOL=OFF \
             -DPICO_NO_HARDWARE=ON \
             -DPICO_SDK_FETCH_FROM_GIT=OFF
