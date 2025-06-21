@@ -21,15 +21,19 @@ jobs:
       - run: |
           cd adb_host
           rm -rf build CMakeCache.txt CMakeFiles
+          export CC="arm-none-eabi-gcc"
+          export CXX="arm-none-eabi-g++"
+          export ASM="arm-none-eabi-gcc"
           cmake -B build \
             -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk \
             -DPICO_PLATFORM=rp2040 \
-            -DCMAKE_C_COMPILER=$(which arm-none-eabi-gcc) \
-            -DCMAKE_ASM_COMPILER=$(which arm-none-eabi-gcc) \
+            -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
+            -DCMAKE_CXX_COMPILER=arm-none-eabi-g++ \
+            -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc \
             -DCMAKE_C_FLAGS="-mcpu=cortex-m0plus -mthumb" \
             -DCMAKE_CXX_FLAGS="-mcpu=cortex-m0plus -mthumb" \
             -DCMAKE_ASM_FLAGS="-mcpu=cortex-m0plus -mthumb" \
             -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
             -DPICO_BUILD_PICOTOOL=OFF \
             -DPICO_NO_HARDWARE=ON
-          cmake --build build --target adb_host -j$(nproc --all)
+          cmake --build build --target adb_host -j4
